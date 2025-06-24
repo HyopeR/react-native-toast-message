@@ -98,7 +98,8 @@ export function usePanResponder({
 
   return {
     panResponder,
+    onGrant,
     onMove,
-    onRelease
+    onRelease,
   };
 }
