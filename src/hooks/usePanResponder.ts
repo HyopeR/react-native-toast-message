@@ -38,6 +38,7 @@ export type UsePanResponderParams = {
   onRestore: () => void;
   onStart: () => void;
   onEnd: () => void;
+  visible: boolean;
   disable?: boolean;
 };
 
@@ -48,29 +49,30 @@ export function usePanResponder({
   onRestore,
   onStart,
   onEnd,
+  visible,
   disable
 }: UsePanResponderParams) {
   const onGrant = React.useCallback(() => {
-      if (disable) return;
+      if (disable || !visible) return;
       onStart();
     },
-    [onStart, disable]
+    [onStart, disable, visible]
   );
 
   const onMove = React.useCallback(
     (_event: GestureResponderEvent, gesture: PanResponderGestureState) => {
-      if (disable) return;
+      if (disable || !visible) return;
 
       const newAnimatedValue = computeNewAnimatedValueForGesture(gesture);
 
       animatedValue.current?.setValue(newAnimatedValue);
     },
-    [animatedValue, computeNewAnimatedValueForGesture, disable]
+    [animatedValue, computeNewAnimatedValueForGesture, disable, visible]
   );
 
   const onRelease = React.useCallback(
     (_event: GestureResponderEvent, gesture: PanResponderGestureState) => {
-      if (disable) return;
+      if (disable || !visible) return;
 
       const newAnimatedValue = computeNewAnimatedValueForGesture(gesture);
       onEnd();
@@ -80,7 +82,7 @@ export function usePanResponder({
         onRestore();
       }
     },
-    [computeNewAnimatedValueForGesture, onEnd, onDismiss, onRestore, disable]
+    [computeNewAnimatedValueForGesture, onEnd, onDismiss, onRestore, disable, visible]
   );
 
   const panResponder = React.useMemo(

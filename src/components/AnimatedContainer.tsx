@@ -131,6 +131,7 @@ export function AnimatedContainer({
     onRestore,
     onStart,
     onEnd,
+    visible: isVisible,
     disable: !swipeable
   });
 
